@@ -1,0 +1,10 @@
+streamlit
+google-genai
+pydantic
+opencv-python
+torch
+transformers
+faiss-cpu
+Pillow
+openai
+ollama

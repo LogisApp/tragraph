@@ -1,7 +1,7 @@
 streamlit
 google-genai
 pydantic
-opencv-python
+opencv-python-headless
 torch
 transformers
 faiss-cpu

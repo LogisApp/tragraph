@@ -1,12 +1,18 @@
 import os
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
+os.environ["HF_HUB_DISABLE_TELEMETRY"] = "1"
+os.environ["TRANSFORMERS_VERBOSITY"] = "error"
 
 import json
+import logging
 import numpy as np
 import faiss
 from PIL import Image
 import torch
 from transformers import CLIPProcessor, CLIPModel
+
+logging.getLogger("transformers").setLevel(logging.ERROR)
+logging.getLogger("huggingface_hub").setLevel(logging.ERROR)
 
 
 class EmbeddingEngine:

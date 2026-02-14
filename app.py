@@ -1,10 +1,27 @@
 import streamlit as st
 import tempfile
 import os
+import requests
 from analysis_engine import TradingAnalysisEngine, LLM_PROVIDERS
 from risk_engine import RiskConfig
 
 VIDEOS_DIR = os.path.join(os.path.dirname(__file__), "videos")
+
+
+def is_ollama_available():
+    """Verifica si Ollama está corriendo localmente."""
+    try:
+        r = requests.get("http://localhost:11434/api/tags", timeout=2)
+        return r.status_code == 200
+    except Exception:
+        return False
+
+
+ollama_available = is_ollama_available()
+available_providers = {
+    k: v for k, v in LLM_PROVIDERS.items()
+    if "Ollama" not in k or ollama_available
+}
 
 st.set_page_config(page_title="AI Trading Strategy Analyzer", layout="wide")
 
@@ -18,9 +35,11 @@ with st.sidebar:
     st.subheader("🤖 Proveedor LLM")
     selected_provider = st.selectbox(
         "Modelo de razonamiento",
-        options=list(LLM_PROVIDERS.keys()),
+        options=list(available_providers.keys()),
         index=0,
     )
+    if not ollama_available:
+        st.caption("ℹ️ Llama Vision no disponible (Ollama no detectado)")
 
     provider_info = LLM_PROVIDERS[selected_provider]
     key_env = provider_info.get("key_env")
